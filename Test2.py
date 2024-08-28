@@ -2,9 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
+import os
 
-# Path to your image
-IMAGE_PATH = "G:\\My Drive\\StudentID\\Image.png"
+# Path to your image in the project directory
+IMAGE_PATH = os.path.join('image', 'Image.png')
 
 # Updated parameter descriptions
 parameter_descriptions = {
@@ -92,8 +93,11 @@ def main():
     st.title("Student ID Generator")
     
     # Display the image
-    st.image(IMAGE_PATH, caption="Student ID Generation System")
-
+    if os.path.exists(IMAGE_PATH):
+        st.image(IMAGE_PATH, caption="Student ID Generation System")
+    else:
+        st.write("Image file not found.")
+    
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
@@ -148,7 +152,8 @@ def main():
         st.download_button(label="Download Mapped Student IDs Excel", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         
     if st.session_state['download_teachers'] is not None:
-        st.download_button(label="Download Teacher Codes Excel", data=st.session_state['download_teachers'], file_name="Teacher_Codes.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        st.download_button(label="Download Teacher Codes Excel", data=st.session
+
 
 if __name__ == "__main__":
     main()
