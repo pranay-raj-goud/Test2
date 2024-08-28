@@ -108,6 +108,9 @@ def main():
         school_digits = st.number_input("School ID Digits", min_value=1, value=3)
         student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
         
+        # Add an image above the "Select Parameters" section
+        st.image("https://i.ibb.co/8KBHnqH/parameter-selection.png", caption="Select Parameters", use_column_width=True)
+
         selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
         st.write(parameter_descriptions[selected_param])
 
@@ -140,7 +143,7 @@ def main():
         
     if st.session_state['download_mapped'] is not None:
         st.download_button(label="Download Mapped Student IDs Excel", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        
+    
     if st.session_state['download_teachers'] is not None:
         st.download_button(label="Download Teacher Codes Excel", data=st.session_state['download_teachers'], file_name="Teacher_Codes.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
