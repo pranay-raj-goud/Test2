@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 import io
 
+# Path to your image
+IMAGE_PATH = "G:\\My Drive\\StudentID\\Image.png"
+
 # Updated parameter descriptions
 parameter_descriptions = {
     'A1': "School_ID, Grade, student_no: Uses School_ID, Grade, and student_no to generate the ID.",
@@ -88,6 +91,9 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 def main():
     st.title("Student ID Generator")
     
+    # Display the image
+    st.image(IMAGE_PATH, caption="Student ID Generation System")
+
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
@@ -108,9 +114,6 @@ def main():
         school_digits = st.number_input("School ID Digits", min_value=1, value=3)
         student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
         
-        # Add an image above the "Select Parameters" section
-        st.image("https://i.ibb.co/8KBHnqH/parameter-selection.png", caption="Select Parameters", use_column_width=True)
-
         selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
         st.write(parameter_descriptions[selected_param])
 
@@ -143,7 +146,7 @@ def main():
         
     if st.session_state['download_mapped'] is not None:
         st.download_button(label="Download Mapped Student IDs Excel", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    
+        
     if st.session_state['download_teachers'] is not None:
         st.download_button(label="Download Teacher Codes Excel", data=st.session_state['download_teachers'], file_name="Teacher_Codes.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
