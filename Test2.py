@@ -88,7 +88,6 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 def main():
     st.title("Student ID Generator")
     
-    
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
@@ -96,40 +95,46 @@ def main():
         st.session_state['download_mapped'] = None
         st.session_state['download_teachers'] = None
         st.title("Input File Structure")
-       # URL of the image in your GitHub repository
+        # URL of the image in your GitHub repository
         image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/image%20(19).png"
-       # Display the image with a caption
+        # Display the image with a caption
         st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
 
-    
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
         
-        
+        # Checkbox to determine if the user wants to use default settings or not
+        use_default = st.checkbox("Run with default settings (A1)")
+
         partner_id = st.number_input("Partner ID", min_value=0, value=0)
-        buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
         grade = st.number_input("Grade", min_value=1, value=1)
-        district_digits = st.number_input("District ID Digits", min_value=1, value=2)
-        block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
-        school_digits = st.number_input("School ID Digits", min_value=1, value=3)
-        student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
-         # Set the title of the app
-        st.title("Parameter Set")
-       # URL of the image in your GitHub repository
-        image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
-       # Display the image with a caption
-        st.image(image_url, caption="Select below parameters", use_column_width=True)
+        if use_default:
+            # Default parameters
+            buffer_percent = 30.0
+            district_digits = 2
+            block_digits = 2
+            school_digits = 3
+            student_digits = 4
+            selected_param = 'A1'  # Default to A1
+        else:
+            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
+            district_digits = st.number_input("District ID Digits", min_value=1, value=2)
+            block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
+            school_digits = st.number_input("School ID Digits", min_value=1, value=3)
+            student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
+            # Set the title of the app
+            st.title("Parameter Set")
+            # URL of the image in your GitHub repository
+            image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
+            # Display the image with a caption
+            st.image(image_url, caption="Select below parameters", use_column_width=True)
 
-
-
-        
-        
-        selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
-        st.write(parameter_descriptions[selected_param])
+            selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
+            st.write(parameter_descriptions[selected_param])
 
         if st.button("Generate IDs"):
             data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
