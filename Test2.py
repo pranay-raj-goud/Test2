@@ -100,22 +100,21 @@ def main():
         # Display the image with a caption
         st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
 
-    # Checkboxes to select mode
-    run_default = st.checkbox("Run with Default settings")
-    customize_id = st.checkbox("Customize your ID")
-
-    
-    # Ensure both checkboxes cannot be selected at the same time
-    if run_default and customize_id:
-        st.warning("Please select only one option.")
-        return
-    
+    # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
-    if uploaded_file is not None and (run_default or customize_id):
+    if uploaded_file is not None:
         st.write("File uploaded successfully!")
         
+        # Checkboxes to select mode
+        run_default = st.checkbox("Run with Default settings")
+        customize_id = st.checkbox("Play & Personalize")
 
+        # Ensure both checkboxes cannot be selected at the same time
+        if run_default and customize_id:
+            st.warning("Please select only one option.")
+            return
+        
         partner_id = st.number_input("Partner ID", min_value=0, value=0)
         grade = st.number_input("Grade", min_value=1, value=1)
 
@@ -126,7 +125,7 @@ def main():
             block_digits = 2
             school_digits = 3
             student_digits = 4
-            selected_param = 'A1'  # Default to A1
+            selected_param = 'A4'  # Default to A1
         elif customize_id:
             buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
             district_digits = st.number_input("District ID Digits", min_value=1, value=2)
@@ -141,7 +140,12 @@ def main():
             # Display the image with a caption
             st.image(image_url, caption="Select below parameters", use_column_width=True)
 
-            selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
+            # Display parameter descriptions directly in selectbox
+            parameter_options = list(parameter_descriptions.values())
+            selected_description = st.selectbox("Select Parameter Set", parameter_options)
+            
+            # Get the corresponding parameter key
+            selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
 
         if st.button("Generate IDs"):
