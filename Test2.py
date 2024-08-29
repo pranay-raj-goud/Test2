@@ -2,12 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
-import os
 
-# Path to your image in the project directory
-IMAGE_PATH = os.path.join('image', 'Image.png')
-
-# Updated parameter descriptions
+# Define the parameter descriptions
 parameter_descriptions = {
     'A1': "School_ID, Grade, student_no: Uses School_ID, Grade, and student_no to generate the ID.",
     'A2': "Block_ID, School_ID, Grade, student_no: Uses Block_ID, School_ID, Grade, and student_no to generate the ID.",
@@ -19,7 +15,7 @@ parameter_descriptions = {
     'A8': "Partner_ID, District_ID, Block_ID, School_ID, Grade, student_no: Uses Partner_ID, District_ID, Block_ID, School_ID, Grade, and student_no to generate the ID."
 }
 
-# Updated parameter mapping
+# Define the new mapping for parameter sets
 parameter_mapping = {
     'A1': "School_ID,Grade,student_no",
     'A2': "Block_ID,School_ID,Grade,student_no",
@@ -92,12 +88,6 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 def main():
     st.title("Student ID Generator")
     
-    # Display the image
-    if os.path.exists(IMAGE_PATH):
-        st.image(IMAGE_PATH, caption="Student ID Generation System")
-    else:
-        st.write("Image file not found.")
-    
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
@@ -153,7 +143,6 @@ def main():
         
     if st.session_state['download_teachers'] is not None:
         st.download_button(label="Download Teacher Codes Excel", data=st.session_state['download_teachers'], file_name="Teacher_Codes.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
 
 if __name__ == "__main__":
     main()
