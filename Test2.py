@@ -101,7 +101,7 @@ def main():
         st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
 
     # Checkboxes to select mode
-    run_default = st.checkbox("Run with Default settings (A1)")
+    run_default = st.checkbox("Run with Default settings")
     customize_id = st.checkbox("Customize your ID")
 
     # Ensure both checkboxes cannot be selected at the same time
