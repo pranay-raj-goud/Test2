@@ -110,11 +110,11 @@ def main():
         student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
          # Set the title of the app
-        st.title("Display Image from GitHub")
+        st.title("Parameter Set")
        # URL of the image in your GitHub repository
         image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
        # Display the image with a caption
-        st.image(image_url, caption="Sample Image from GitHub", use_column_width=True)
+        st.image(image_url, caption="Select below parameters", use_column_width=True)
 
 
 
