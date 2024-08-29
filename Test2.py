@@ -100,18 +100,24 @@ def main():
         # Display the image with a caption
         st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
 
+    # Checkboxes to select mode
+    run_default = st.checkbox("Run with Default settings (A1)")
+    customize_id = st.checkbox("Customize your ID")
+
+    # Ensure both checkboxes cannot be selected at the same time
+    if run_default and customize_id:
+        st.warning("Please select only one option.")
+        return
+    
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
-    if uploaded_file is not None:
+    if uploaded_file is not None and (run_default or customize_id):
         st.write("File uploaded successfully!")
-        
-        # Checkbox to determine if the user wants to use default settings or not
-        use_default = st.checkbox("Run with default settings (A1)")
 
         partner_id = st.number_input("Partner ID", min_value=0, value=0)
         grade = st.number_input("Grade", min_value=1, value=1)
 
-        if use_default:
+        if run_default:
             # Default parameters
             buffer_percent = 30.0
             district_digits = 2
@@ -119,7 +125,7 @@ def main():
             school_digits = 3
             student_digits = 4
             selected_param = 'A1'  # Default to A1
-        else:
+        elif customize_id:
             buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
             district_digits = st.number_input("District ID Digits", min_value=1, value=2)
             block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
