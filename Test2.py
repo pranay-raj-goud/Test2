@@ -101,9 +101,7 @@ def main():
         st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
 
     # Checkboxes to select mode
-    run_default = st.checkbox("Run with Default settings")
-    customize_id = st.checkbox("Customize your ID")
-
+    
     # Ensure both checkboxes cannot be selected at the same time
     if run_default and customize_id:
         st.warning("Please select only one option.")
@@ -113,6 +111,9 @@ def main():
 
     if uploaded_file is not None and (run_default or customize_id):
         st.write("File uploaded successfully!")
+        run_default = st.checkbox("Run with Default settings")
+        customize_id = st.checkbox("Customize your ID")
+
 
         partner_id = st.number_input("Partner ID", min_value=0, value=0)
         grade = st.number_input("Grade", min_value=1, value=1)
