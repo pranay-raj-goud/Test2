@@ -146,6 +146,10 @@ def main():
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
 
+            # Add notification messages
+            st.warning("Avoid Digit Overload in Your Enrollments:")
+            st.warning("Ensure that the number of digits for District ID, Block ID, School ID, and Student ID is appropriate to avoid overload.")
+
         if run_default or customize_id:
             if st.button("Generate IDs"):
                 data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
@@ -171,8 +175,8 @@ def main():
                 st.session_state['download_teachers'] = towrite3
 
     # Always show download buttons
-    if st.session_state['download_data'] is not None:
-        st.download_button(label="Download Student IDs Excel", data=st.session_state['download_data'], file_name="Student_Ids.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    #if st.session_state['download_data'] is not None:
+        #st.download_button(label="Download Student IDs Excel", data=st.session_state['download_data'], file_name="Student_Ids.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         
     if st.session_state['download_mapped'] is not None:
         st.download_button(label="Download Mapped Student IDs Excel", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
