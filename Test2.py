@@ -100,6 +100,12 @@ def main():
 
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
+        st.title("Input File Structure")
+       # URL of the image in your GitHub repository
+        image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/image%20(19).png"
+       # Display the image with a caption
+        st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
+
         
         partner_id = st.number_input("Partner ID", min_value=0, value=0)
         buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
