@@ -131,17 +131,17 @@ def main():
         if customize_id:
             # Custom parameters
             partner_id = st.number_input("Partner ID
-            (Avoid Digit Overload in Your Enrollments)", min_value=0, value=1)
+            *Avoid Digit Overload in Your Enrollments*", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
             buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
             district_digits = st.number_input("District ID Digits 
-            (Avoid Digit Overload in Your Enrollments)", min_value=1, value=2)
+            *Avoid Digit Overload in Your Enrollments*", min_value=1, value=2)
             block_digits = st.number_input("Block ID Digits
-            (Avoid Digit Overload in Your Enrollments)", min_value=1, value=2)
+            *Avoid Digit Overload in Your Enrollments*", min_value=1, value=2)
             school_digits = st.number_input("School ID Digits
-            (Avoid Digit Overload in Your Enrollments)", min_value=1, value=3)
+            *Avoid Digit Overload in Your Enrollments*", min_value=1, value=3)
             student_digits = st.number_input("Student ID Digits
-            (Avoid Digit Overload in Your Enrollments)", min_value=1, value=4)
+            *Avoid Digit Overload in Your Enrollments*", min_value=1, value=4)
             
             # Display parameter descriptions directly in selectbox
             parameter_options = list(parameter_descriptions.values())
