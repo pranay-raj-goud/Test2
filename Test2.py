@@ -88,12 +88,6 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 def main():
     st.title("Student ID Generator")
     
-    # Set the title of the app
-    st.title("Display Image from GitHub")
-    # URL of the image in your GitHub repository
-    image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
-    # Display the image with a caption
-    st.image(image_url, caption="Sample Image from GitHub", use_column_width=True)
     
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
@@ -114,6 +108,18 @@ def main():
         block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
         school_digits = st.number_input("School ID Digits", min_value=1, value=3)
         student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
+
+         # Set the title of the app
+       st.title("Display Image from GitHub")
+       # URL of the image in your GitHub repository
+       image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
+       # Display the image with a caption
+       st.image(image_url, caption="Sample Image from GitHub", use_column_width=True)
+
+
+
+
+        
         
         selected_param = st.selectbox("Select Parameter Set", list(parameter_mapping.keys()))
         st.write(parameter_descriptions[selected_param])
