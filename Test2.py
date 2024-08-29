@@ -148,7 +148,7 @@ def main():
 
             # Add notification messages
             st.warning("Avoid Digit Overload in Your Enrollments:")
-            st.warning("Ensure that the number of digits for District ID, Block ID, School ID, and Student ID is appropriate to avoid overload.")
+            #st.warning("Ensure that the number of digits for District ID, Block ID, School ID, and Student ID is appropriate to avoid overload.")
 
         if run_default or customize_id:
             if st.button("Generate IDs"):
