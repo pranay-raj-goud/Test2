@@ -107,8 +107,8 @@ def main():
         st.write("File uploaded successfully!")
         
         # Checkboxes to select mode
-        run_default = st.checkbox("Run with Default Settings")
-        customize_id = st.checkbox("Customize Your ID")
+        run_default = st.checkbox("Rock the Default Settings")
+        customize_id = st.checkbox("Play by Your Rules")
 
         # Ensure only one checkbox is selected
         if run_default and customize_id:
@@ -119,11 +119,11 @@ def main():
             # Default parameters
             partner_id = 1
             grade = st.number_input("Grade", min_value=1, value=1)
-            buffer_percent = 30.0
+            buffer_percent = 0.0
             district_digits = 2
             block_digits = 2
             school_digits = 3
-            student_digits = 4
+            student_digits = 3
             selected_param = 'A4'  # Default to A4
 
             st.write("Default parameters are set.")
