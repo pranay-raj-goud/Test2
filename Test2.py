@@ -88,6 +88,13 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 def main():
     st.title("Student ID Generator")
     
+    # Set the title of the app
+    st.title("Display Image from GitHub")
+    # URL of the image in your GitHub repository
+    image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/Image.png"
+    # Display the image with a caption
+    st.image(image_url, caption="Sample Image from GitHub", use_column_width=True)
+    
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
