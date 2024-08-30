@@ -95,10 +95,21 @@ def main():
         st.session_state['download_mapped'] = None
         st.session_state['download_teachers'] = None
         st.title("Input File Structure")
-        # URL of the image in your GitHub repository
-        image_url = "https://raw.githubusercontent.com/pranay-raj-goud/Test2/main/image%20(19).png"
-        # Display the image with a caption
-        st.image(image_url, caption="Your input file should be in this format", use_column_width=True)
+        
+        # Data for the example table
+        data = {
+            'District': ['District A', 'District B', 'District C'],
+            'Block': ['Block A', 'Block B', 'Block C'],
+            'School_ID': [1001, 1002, 1003],
+            'School': ['School A', 'School B', 'School C'],
+            'Total_Students': [300, 450, 200]
+        }
+        # Create a DataFrame
+        df = pd.DataFrame(data)
+        # Display the table
+        st.table(df)
+        # Display a note emphasizing that School_ID should be unique
+        st.markdown("**School_ID column should be unique**")
 
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
@@ -148,7 +159,6 @@ def main():
 
             # Add notification messages
             st.warning("Avoid Digit Overload in Your Enrollments:")
-            #st.warning("Ensure that the number of digits for District ID, Block ID, School ID, and Student ID is appropriate to avoid overload.")
 
         if run_default or customize_id:
             if st.button("Generate IDs"):
@@ -175,9 +185,6 @@ def main():
                 st.session_state['download_teachers'] = towrite3
 
     # Always show download buttons
-    #if st.session_state['download_data'] is not None:
-        #st.download_button(label="Download Student IDs Excel", data=st.session_state['download_data'], file_name="Student_Ids.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        
     if st.session_state['download_mapped'] is not None:
         st.download_button(label="Download Mapped Student IDs Excel", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         
