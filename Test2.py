@@ -74,11 +74,10 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
     # Use the selected parameter set for generating Custom_ID
     data_expanded['Custom_ID'] = data_expanded.apply(lambda row: generate_custom_id(row, parameter_mapping[selected_param]), axis=1)
 
-    # Generate the additional Excel sheets with mapped columns
+    # Generate the additional Excel sheets with mapped columns (without the Gender column)
     data_mapped = data_expanded[['Custom_ID', 'Grade', 'School', 'School_ID', 'District', 'Block']].copy()
     data_mapped.columns = ['Roll_Number', 'Grade', 'School Name', 'School Code', 'District Name', 'Block Name']
-    data_mapped['Gender'] = np.random.choice(['Male', 'Female'], size=len(data_mapped), replace=True)
-    
+
     # Generate Teacher_Codes sheet
     teacher_codes = data[['School', 'School_ID']].copy()
     teacher_codes.columns = ['School Name', 'Teacher Code']
@@ -108,8 +107,10 @@ def main():
         df = pd.DataFrame(data)
         # Display the table
         st.table(df)
-        # Display a note emphasizing that School_ID should be unique
-        st.markdown(" Note:School_ID column should be unique")
+        # Display a note emphasizing that School_ID should be unique with red text
+        st.markdown("<span style='color:red; font-weight:bold;'>Note: School_ID column should be unique</span>", unsafe_allow_html=True)
+        # Display the line in blue
+        st.markdown("<span style='color:blue;'>Limit 200MB per file • XLSX</span>", unsafe_allow_html=True)
 
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
@@ -184,12 +185,30 @@ def main():
                 st.session_state['download_mapped'] = towrite2
                 st.session_state['download_teachers'] = towrite3
 
-    # Always show download buttons
+    # Always show download buttons with customized styles
     if st.session_state['download_mapped'] is not None:
-        st.download_button(label="Download Student IDs", data=st.session_state['download_mapped'], file_name="Student_Ids_Mapped.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        st.markdown(
+            """
+            <a href="data:application/octet-stream;base64,{b64}" download="Student_Ids_Mapped.xlsx">
+            <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
+            Download Student IDs <i class="fa fa-download"></i></button>
+            </a>
+            <br><small>Click here to download</small>
+            """.format(b64=st.session_state['download_mapped'].getvalue().encode('base64')), 
+            unsafe_allow_html=True
+        )
         
     if st.session_state['download_teachers'] is not None:
-        st.download_button(label="Download School Codes", data=st.session_state['download_teachers'], file_name="Teacher_Codes.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        st.markdown(
+            """
+            <a href="data:application/octet-stream;base64,{b64}" download="Teacher_Codes.xlsx">
+            <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
+            Download School Codes <i class="fa fa-download"></i></button>
+            </a>
+            <br><small>Click here to download</small>
+            """.format(b64=st.session_state['download_teachers'].getvalue().encode('base64')), 
+            unsafe_allow_html=True
+        )
 
 if __name__ == "__main__":
     main()
