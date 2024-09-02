@@ -86,32 +86,47 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
     return data_expanded, data_mapped, teacher_codes
 
 def main():
-    st.title("Tool for ID generation")
+    # Centered title
+    st.markdown("<h1 style='text-align: center;'>Tool for ID Generation</h1>", unsafe_allow_html=True)
+
+    # Replace text and set font size to small
+    st.markdown("<p style='font-size: small;'>Please rename your column headers as per input file structure shown:</p>", unsafe_allow_html=True)
     
+    # Data for the example table
+    data = {
+        'District': ['District A'],
+        'Block': ['Block A'],
+        'School_ID': [1001],
+        'School': ['School A'],
+        'Total_Students': [300]
+    }
+    # Create a DataFrame
+    df = pd.DataFrame(data)
+    
+    # Center the table headers
+    st.markdown("""
+    <style>
+    .dataframe thead th {
+        text-align: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Display the table
+    st.table(df)
+    
+    # Display a note emphasizing that School_ID should be unique with red text
+    st.markdown("<span style='color:red; font-weight:bold;'>Note: School_ID column should be unique</span>", unsafe_allow_html=True)
+    
+    # Display the line in blue
+    st.markdown("<span style='color:blue;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
+
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
         st.session_state['download_data'] = None
         st.session_state['download_mapped'] = None
         st.session_state['download_teachers'] = None
-        st.title("Input File Structure")
-        
-        # Data for the example table
-        data = {
-            'District': ['District A', 'District B', 'District C'],
-            'Block': ['Block A', 'Block B', 'Block C'],
-            'School_ID': [1001, 1002, 1003],
-            'School': ['School A', 'School B', 'School C'],
-            'Total_Students': [300, 450, 200]
-        }
-        # Create a DataFrame
-        df = pd.DataFrame(data)
-        # Display the table
-        st.table(df)
-        # Display a note emphasizing that School_ID should be unique with red text
-        st.markdown("<span style='color:red; font-weight:bold;'>Note: School_ID column should be unique</span>", unsafe_allow_html=True)
-        # Display the line in blue
-        st.markdown("<span style='color:blue;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
 
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
