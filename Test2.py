@@ -115,9 +115,8 @@ def main():
     # Display the table
     st.table(df)
     
-    # Display a note with "Note:" in red and the rest in black text
-    st.markdown("<span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>School_ID column should be unique</span>", unsafe_allow_html=True)
-    st.markdown("<span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
+    # Display a single note with two pointers
+    st.markdown("<span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>School_ID column should be unique</span><br><span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
 
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
