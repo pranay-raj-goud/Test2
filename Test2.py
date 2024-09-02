@@ -226,8 +226,8 @@ def main():
                 st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Teacher Codes File</a>'
 
             # Display the download links
-            if st.session_state['download_data']:
-                st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
+            #if st.session_state['download_data']:
+                #st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
             if st.session_state['download_mapped']:
                 st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
             if st.session_state['download_teachers']:
