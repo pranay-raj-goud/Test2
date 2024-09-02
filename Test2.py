@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
-import base6
+import base64  # Corrected import
 
 # Define the parameter descriptions
 parameter_descriptions = {
@@ -186,35 +186,32 @@ def main():
                 st.session_state['download_mapped'] = towrite2
                 st.session_state['download_teachers'] = towrite3
 
-  4  # Add this import at the top
+                # Customized Download Buttons
+                if st.session_state['download_mapped'] is not None:
+                    b64_mapped = base64.b64encode(st.session_state['download_mapped'].getvalue()).decode()  # Corrected base64 encoding
+                    st.markdown(
+                        f"""
+                        <a href="data:application/octet-stream;base64,{b64_mapped}" download="Student_Ids_Mapped.xlsx">
+                        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
+                        Download Student IDs <i class="fa fa-download"></i></button>
+                        </a>
+                        <br><small>Click here to download</small>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
-# Customized Download Buttons
-if st.session_state['download_mapped'] is not None:
-    b64_mapped = base64.b64encode(st.session_state['download_mapped'].getvalue()).decode()  # Corrected base64 encoding
-    st.markdown(
-        f"""
-        <a href="data:application/octet-stream;base64,{b64_mapped}" download="Student_Ids_Mapped.xlsx">
-        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
-        Download Student IDs <i class="fa fa-download"></i></button>
-        </a>
-        <br><small>Click here to download</small>
-        """,
-        unsafe_allow_html=True
-    )
-
-if st.session_state['download_teachers'] is not None:
-    b64_teachers = base64.b64encode(st.session_state['download_teachers'].getvalue()).decode()  # Corrected base64 encoding
-    st.markdown(
-        f"""
-        <a href="data:application/octet-stream;base64,{b64_teachers}" download="Teacher_Codes.xlsx">
-        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
-        Download School Codes <i class="fa fa-download"></i></button>
-        </a>
-        <br><small>Click here to download</small>
-        """,
-        unsafe_allow_html=True
-    )
-
+                if st.session_state['download_teachers'] is not None:
+                    b64_teachers = base64.b64encode(st.session_state['download_teachers'].getvalue()).decode()  # Corrected base64 encoding
+                    st.markdown(
+                        f"""
+                        <a href="data:application/octet-stream;base64,{b64_teachers}" download="Teacher_Codes.xlsx">
+                        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
+                        Download School Codes <i class="fa fa-download"></i></button>
+                        </a>
+                        <br><small>Click here to download</small>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
 if __name__ == "__main__":
     main()
