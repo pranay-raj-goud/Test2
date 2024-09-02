@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import io
-import base64  # Corrected import
+import base64
 
 # Define the parameter descriptions
 parameter_descriptions = {
@@ -124,6 +124,17 @@ def main():
         background-color: #f4f4f4;
         text-align: center;
     }
+    .download-link {
+        color: green;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .download-link:hover {
+        text-decoration: underline;
+    }
+    .download-icon {
+        margin-right: 8px;
+    }
     </style>
     """
 
@@ -210,17 +221,17 @@ def main():
                 excel_data = excel_buffer.getvalue()
 
                 b64 = base64.b64encode(excel_data).decode()
-                st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx">Download Full Data File</a>'
-                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx">Download Mapped Data File</a>'
-                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx">Download Teacher Codes File</a>'
+                st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Full Data File</a>'
+                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Mapped Data File</a>'
+                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Teacher Codes File</a>'
 
             # Display the download links
-            #if st.session_state['download_data']:
-                #st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
+            if st.session_state['download_data']:
+                st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
             if st.session_state['download_mapped']:
-                st.markdown(st.session_state['Download Student Ids'], unsafe_allow_html=True)
+                st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
             if st.session_state['download_teachers']:
-                st.markdown(st.session_state['Download School Codes'], unsafe_allow_html=True)
+                st.markdown(st.session_state['download_teachers'], unsafe_allow_html=True)
 
 if __name__ == '__main__':
     main()
