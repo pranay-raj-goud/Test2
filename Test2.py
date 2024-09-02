@@ -91,7 +91,7 @@ def main():
 
     # Replace text and set font size to small
     st.markdown("<p style='font-size: small;'>Please rename your column headers as per input file structure shown:</p>", unsafe_allow_html=True)
-    
+
     # Data for the example table
     data = {
         'District': ['District A'],
@@ -102,28 +102,42 @@ def main():
     }
     # Create a DataFrame
     df = pd.DataFrame(data)
-    
-    # Center the table headers
-    st.markdown("""
+
+    # Convert DataFrame to HTML
+    html_table = df.to_html(index=False, border=0, classes='custom-table')
+
+    # Custom CSS to style the table
+    css = """
     <style>
-    .dataframe thead th {
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+    .custom-table th, .custom-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+    .custom-table th {
+        background-color: #f4f4f4;
         text-align: center;
     }
     </style>
-    """, unsafe_allow_html=True)
-    
-    # Display the table
-    st.table(df)
-    
-    # Display a single note with two pointers
+    """
+
+    # Display the text and table
+    st.markdown(css, unsafe_allow_html=True)
+    st.markdown(html_table, unsafe_allow_html=True)
+
     # Display a single note with two pointers, separated by line breaks for clarity
     st.markdown(
-    """
-    <span style='color:red; font-weight:bold;'>Note:</span><br>
-    <span style='color:black;'>• School_ID column should be unique</span><br>
-    <span style='color:black;'>• Please upload an XLSX file that is less than 200MB in size.</span>
-    """,
-    unsafe_allow_html=True
+        """
+        <span style='color:red; font-weight:bold;'>Note:</span><br>
+        <span style='color:black;'>• School_ID column should be unique</span><br>
+        <span style='color:black;'>• Please upload an XLSX file that is less than 200MB in size.</span>
+        """,
+        unsafe_allow_html=True
     )
 
     # Initialize session state for buttons
@@ -138,7 +152,7 @@ def main():
 
     if uploaded_file is not None:
         st.write("File uploaded successfully!")
-        
+
         # Checkboxes to select mode
         run_default = st.checkbox("Rock the Default Settings")
         customize_id = st.checkbox("Play by Your Rules")
@@ -147,7 +161,7 @@ def main():
         if run_default and customize_id:
             st.warning("Please select only one option.")
             return
-        
+
         if run_default:
             # Default parameters
             partner_id = 1
@@ -160,7 +174,7 @@ def main():
             selected_param = 'A4'  # Default to A4
 
             st.write("Default parameters are set.")
-        
+
         if customize_id:
             # Custom parameters
             partner_id = st.number_input("Partner ID", min_value=0, value=1)
@@ -170,11 +184,11 @@ def main():
             block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
             school_digits = st.number_input("School ID Digits", min_value=1, value=3)
             student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
-            
+
             # Display parameter descriptions directly in selectbox
             parameter_options = list(parameter_descriptions.values())
             selected_description = st.selectbox("Select Parameter Set", parameter_options)
-            
+
             # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
