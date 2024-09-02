@@ -111,7 +111,7 @@ def main():
         # Display a note emphasizing that School_ID should be unique with red text
         st.markdown("<span style='color:red; font-weight:bold;'>Note: School_ID column should be unique</span>", unsafe_allow_html=True)
         # Display the line in blue
-        st.markdown("<span style='color:blue;'>Limit 200MB per file • XLSX</span>", unsafe_allow_html=True)
+        st.markdown("<span style='color:blue;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
 
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
