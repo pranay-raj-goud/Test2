@@ -113,6 +113,7 @@ def main():
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
+        margin-top: 5px; /* Adjust spacing between text and table */
     }
     .custom-table th, .custom-table td {
         padding: 10px;
