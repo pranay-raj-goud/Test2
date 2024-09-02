@@ -116,15 +116,14 @@ def main():
     st.table(df)
     
     # Display a single note with two pointers
+    # Display a single note with two pointers, separated by line breaks for clarity
     st.markdown(
-        """
-        <span style='color:red; font-weight:bold;'>Note:</span> 
-        <ul style='color:black;'>
-            <li>School_ID column should be unique</li>
-            <li>Please upload an XLSX file that is less than 200MB in size.</li>
-        </ul>
-        """,
-        unsafe_allow_html=True
+    """
+    <span style='color:red; font-weight:bold;'>Note:</span><br>
+    <span style='color:black;'>• School_ID column should be unique</span><br>
+    <span style='color:black;'>• Please upload an XLSX file that is less than 200MB in size.</span>
+    """,
+    unsafe_allow_html=True
     )
 
     # Initialize session state for buttons
