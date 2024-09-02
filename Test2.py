@@ -215,12 +215,12 @@ def main():
                 st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx">Download Teacher Codes File</a>'
 
             # Display the download links
-            if st.session_state['download_data']:
-                st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
+            #if st.session_state['download_data']:
+                #st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
             if st.session_state['download_mapped']:
-                st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
+                st.markdown(st.session_state['Download Student Ids'], unsafe_allow_html=True)
             if st.session_state['download_teachers']:
-                st.markdown(st.session_state['download_teachers'], unsafe_allow_html=True)
+                st.markdown(st.session_state['Download School Codes'], unsafe_allow_html=True)
 
 if __name__ == '__main__':
     main()
