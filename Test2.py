@@ -86,7 +86,7 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
     return data_expanded, data_mapped, teacher_codes
 
 def main():
-    st.title("Student ID Generator")
+    st.title("Tool for ID generation")
     
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
@@ -109,7 +109,7 @@ def main():
         # Display the table
         st.table(df)
         # Display a note emphasizing that School_ID should be unique
-        st.markdown("**School_ID column should be unique**")
+        st.markdown(" Note:School_ID column should be unique")
 
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
