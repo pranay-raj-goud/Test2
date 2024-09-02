@@ -222,8 +222,8 @@ def main():
 
                 b64 = base64.b64encode(excel_data).decode()
                 st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Full Data File</a>'
-                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Mapped Data File</a>'
-                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Teacher Codes File</a>'
+                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download Student IDs</a>'
+                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download School Codes</a>'
 
             # Display the download links
             #if st.session_state['download_data']:
