@@ -115,11 +115,9 @@ def main():
     # Display the table
     st.table(df)
     
-    # Display a note emphasizing that School_ID should be unique with red text
-    st.markdown("<span style='color:red; font-weight:bold;'>Note: School_ID column should be unique</span>", unsafe_allow_html=True)
-    
-    # Display the line in blue
-    st.markdown("<span style='color:blue;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
+    # Display a note with "Note:" in red and the rest in black text
+    st.markdown("<span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>School_ID column should be unique</span>", unsafe_allow_html=True)
+    st.markdown("<span style='color:red; font-weight:bold;'>Note:</span> <span style='color:black;'>Please upload an XLSX file that is less than 200MB in size.</span>", unsafe_allow_html=True)
 
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
@@ -182,51 +180,25 @@ def main():
                 data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
 
                 # Save the data for download
-                towrite1 = io.BytesIO()
-                towrite2 = io.BytesIO()
-                towrite3 = io.BytesIO()
-                with pd.ExcelWriter(towrite1, engine='xlsxwriter') as writer:
-                    data_expanded.to_excel(writer, index=False)
-                with pd.ExcelWriter(towrite2, engine='xlsxwriter') as writer:
-                    data_mapped.to_excel(writer, index=False)
-                with pd.ExcelWriter(towrite3, engine='xlsxwriter') as writer:
-                    teacher_codes.to_excel(writer, index=False)
-                
-                towrite1.seek(0)
-                towrite2.seek(0)
-                towrite3.seek(0)
-                
-                # Update session state for download links
-                st.session_state['download_data'] = towrite1
-                st.session_state['download_mapped'] = towrite2
-                st.session_state['download_teachers'] = towrite3
+                excel_buffer = io.BytesIO()
+                with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
+                    data_expanded.to_excel(writer, sheet_name='Full Data', index=False)
+                    data_mapped.to_excel(writer, sheet_name='Mapped Data', index=False)
+                    teacher_codes.to_excel(writer, sheet_name='Teacher Codes', index=False)
+                excel_data = excel_buffer.getvalue()
 
-                # Customized Download Buttons
-                if st.session_state['download_mapped'] is not None:
-                    b64_mapped = base64.b64encode(st.session_state['download_mapped'].getvalue()).decode()  # Corrected base64 encoding
-                    st.markdown(
-                        f"""
-                        <a href="data:application/octet-stream;base64,{b64_mapped}" download="Student_Ids_Mapped.xlsx">
-                        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
-                        Download Student IDs <i class="fa fa-download"></i></button>
-                        </a>
-                        <br><small>Click here to download</small>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                b64 = base64.b64encode(excel_data).decode()
+                st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx">Download Full Data File</a>'
+                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx">Download Mapped Data File</a>'
+                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx">Download Teacher Codes File</a>'
 
-                if st.session_state['download_teachers'] is not None:
-                    b64_teachers = base64.b64encode(st.session_state['download_teachers'].getvalue()).decode()  # Corrected base64 encoding
-                    st.markdown(
-                        f"""
-                        <a href="data:application/octet-stream;base64,{b64_teachers}" download="Teacher_Codes.xlsx">
-                        <button style="background-color:green;color:white;padding:10px;border:none;border-radius:5px;">
-                        Download School Codes <i class="fa fa-download"></i></button>
-                        </a>
-                        <br><small>Click here to download</small>
-                        """,
-                        unsafe_allow_html=True
-                    )
+            # Display the download links
+            if st.session_state['download_data']:
+                st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
+            if st.session_state['download_mapped']:
+                st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
+            if st.session_state['download_teachers']:
+                st.markdown(st.session_state['download_teachers'], unsafe_allow_html=True)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
