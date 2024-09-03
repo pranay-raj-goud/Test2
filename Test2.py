@@ -163,7 +163,8 @@ def main():
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
     if uploaded_file is not None:
-        st.write("File uploaded successfully!")
+        # Display the message in green color and centered
+        st.markdown("<p style='color: green; text-align: center; font-weight: bold;'>File uploaded successfully!</p>", unsafe_allow_html=True)
 
         # Checkboxes to select mode
         run_default = st.checkbox("IDs with Default Settings")
@@ -188,50 +189,40 @@ def main():
             st.write("Default parameters are set.")
 
         if customize_id:
+            # Combined message above Partner ID
+            st.markdown("<p><b>Please provide required values</b></p>", unsafe_allow_html=True)
+            
             # Custom parameters
             partner_id = st.number_input("Partner ID", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
-            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
-            district_digits = st.number_input("District ID Digits", min_value=1, value=2)
-            block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
-            school_digits = st.number_input("School ID Digits", min_value=1, value=3)
-            student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
+            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=0.0)
+            
+            # New message in blue after buffer input
+            st.markdown("<p style='color: blue;'><b>Please provide required inputs</b></p>", unsafe_allow_html=True)
+            
+            district_digits = st.number_input("District Digits", min_value=1, max_value=5, value=2)
+            block_digits = st.number_input("Block Digits", min_value=1, max_value=5, value=2)
+            school_digits = st.number_input("School Digits", min_value=1, max_value=5, value=3)
+            student_digits = st.number_input("Student Digits", min_value=1, max_value=5, value=3)
 
-            # Display parameter descriptions directly in selectbox
-            parameter_options = list(parameter_descriptions.values())
-            selected_description = st.selectbox("Select Parameter Set", parameter_options)
-
-            # Get the corresponding parameter key
-            selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
-            st.write(parameter_descriptions[selected_param])
-
-            # Add notification messages
-            st.warning("Avoid Digit Overload in Your Enrollments:")
+            # Updated text for parameter selection
+            selected_param = st.radio(
+                "Please select parameter set for Desired Combination of Student's ID",
+                list(parameter_descriptions.keys()),
+                format_func=lambda x: parameter_descriptions[x]
+            )
 
         if run_default or customize_id:
-            if st.button("Generate IDs"):
-                data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
+            # Process the uploaded file with the chosen parameters
+            data_expanded, data_mapped, teacher_codes = process_data(
+                uploaded_file, partner_id, buffer_percent, grade,
+                district_digits, block_digits, school_digits, student_digits, selected_param
+            )
 
-                # Save the data for download
-                excel_buffer = io.BytesIO()
-                with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-                    data_expanded.to_excel(writer, sheet_name='Full Data', index=False)
-                    data_mapped.to_excel(writer, sheet_name='Mapped Data', index=False)
-                    teacher_codes.to_excel(writer, sheet_name='Teacher Codes', index=False)
-                excel_data = excel_buffer.getvalue()
+            # Offer downloads for each generated file
+            st.download_button("Download Data File", data_expanded.to_csv(index=False), "data_file.csv", "text/csv")
+            st.download_button("Download Mapped File", data_mapped.to_csv(index=False), "mapped_file.csv", "text/csv")
+            st.download_button("Download Teacher Codes File", teacher_codes.to_csv(index=False), "teacher_codes.csv", "text/csv")
 
-                b64 = base64.b64encode(excel_data).decode()
-                st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Full Data File</a>'
-                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download Student IDs</a>'
-                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download School Codes</a>'
-
-            # Display the download links
-            #if st.session_state['download_data']:
-                #st.markdown(st.session_state['download_data'], unsafe_allow_html=True)
-            if st.session_state['download_mapped']:
-                st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
-            if st.session_state['download_teachers']:
-                st.markdown(st.session_state['download_teachers'], unsafe_allow_html=True)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
