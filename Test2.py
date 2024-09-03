@@ -206,7 +206,10 @@ def main():
             # Create the format string based on selected_param
             param_description = parameter_descriptions[selected_param]
             format_parts = param_description.split(' + ')
-            format_string = ' '.join([f"{'X'*len(part.split('_')[0])}" for part in format_parts])
+            format_string = ' '.join([f"{'X' * (school_digits if 'School' in part else 
+            block_digits if 'Block' in part else 
+            district_digits if 'District' in part else 
+            student_digits)}" for part in format_parts])
             
             st.markdown(f"### Your ID format would be: {format_string}")
         
