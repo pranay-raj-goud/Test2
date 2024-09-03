@@ -141,9 +141,8 @@ def main():
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
         st.session_state['buttons_initialized'] = True
+        st.session_state['generate_clicked'] = False  # State to check if Generate button is clicked
         st.session_state['download_data'] = None
-        st.session_state['download_mapped'] = None
-        st.session_state['download_teachers'] = None
     
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
@@ -212,56 +211,53 @@ def main():
             # Display the ID format with a smaller font size
             st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
         
-        # Process data if one of the modes is selected
-        if uploaded_file and (run_default or customize_id):
-            data_expanded, data_mapped, teacher_codes = process_data(
-                uploaded_file, partner_id, buffer_percent, grade,
-                district_digits, block_digits, school_digits, student_digits, selected_param
-            )
-            
-            # Save results to Excel
-            buffer = io.BytesIO()
-            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                data_expanded.to_excel(writer, sheet_name='Student_IDs', index=False)
-                data_mapped.to_excel(writer, sheet_name='Mapped_IDs', index=False)
-                teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
-            st.session_state['download_data'] = buffer.getvalue()
-            
-            # Generate download links
-            st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
-            
-            # Download link for Student_IDs
-            st.markdown(
-                f"""
-                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                download="Student_IDs.xlsx" class="download-link">
-                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Student IDs
-                </a>
-                """,
-                unsafe_allow_html=True
-            )
-            
-            # Download link for Mapped_IDs
-            st.markdown(
-                f"""
-                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                download="Mapped_IDs.xlsx" class="download-link">
-                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Mapped IDs
-                </a>
-                """,
-                unsafe_allow_html=True
-            )
-            
-            # Download link for Teacher_Codes
-            st.markdown(
-                f"""
-                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                download="Teacher_Codes.xlsx" class="download-link">
-                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Teacher Codes
-                </a>
-                """,
-                unsafe_allow_html=True
-            )
-
-if __name__ == "__main__":
-    main()
+        # Generate IDs button
+        if st.button("Generate IDs"):
+            st.session_state['generate_clicked'] = True  # Set state to True when button is clicked
+        
+        # Only show download options after "Generate IDs" button is clicked
+        if st.session_state['generate_clicked']:
+            # Process data if one of the modes is selected
+            if uploaded_file and (run_default or customize_id):
+                data_expanded, data_mapped, teacher_codes = process_data(
+                    uploaded_file, partner_id, buffer_percent, grade,
+                    district_digits, block_digits, school_digits, student_digits, selected_param
+                )
+                
+                # Save results to Excel
+                buffer = io.BytesIO()
+                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                    data_expanded.to_excel(writer, sheet_name='Student_IDs', index=False)
+                    data_mapped.to_excel(writer, sheet_name='Mapped_IDs', index=False)
+                    teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
+                st.session_state['download_data'] = buffer.getvalue()
+                
+                # Generate download links
+                st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
+                
+                # Download link for Student_IDs
+                st.markdown(
+                    f"""
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                    download="Student_IDs.xlsx" class="download-link">
+                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Student IDs
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+                
+                # Download link for Mapped_IDs
+                st.markdown(
+                    f"""
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                    download="Mapped_IDs.xlsx" class="download-link">
+                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Mapped IDs
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+                
+                # Download link for Teacher_Codes
+                st.markdown(
+                    f"""
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode
