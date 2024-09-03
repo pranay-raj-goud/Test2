@@ -202,40 +202,64 @@ def main():
             
             # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
-            id_format = f"{'X'*A1} {'X'*A2} {'X'*district_digits} {'X'*block_digits} {'X'*school_digits} {'X'*student_digits}"
-    
-            st.markdown(f"### Your ID format would be: {id_format}")
-            st.markdown(
-            """
-            <span style='color:red; font-weight:bold;'>Note:</span><br>
-            <span style='color:black;'>• Avoid Digit Overload in Your Enrollments:</span><br>
-            """,
-            unsafe_allow_html=True
-            )
-            #st.warning("Avoid Digit Overload in Your Enrollments:")
-        
-        if run_default or customize_id:
-            if st.button("Generate IDs"):
-                data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
-                
-                # Save the data for download
-                excel_buffer = io.BytesIO()
-                with pd.ExcelWriter(excel_buffer, engine='xlsxwriter') as writer:
-                    data_expanded.to_excel(writer, sheet_name='Full Data', index=False)
-                    data_mapped.to_excel(writer, sheet_name='Mapped Data', index=False)
-                    teacher_codes.to_excel(writer, sheet_name='Teacher Codes', index=False)
-                excel_data = excel_buffer.getvalue()
-                b64 = base64.b64encode(excel_data).decode()
-                
-                st.session_state['download_data'] = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to download Full Data File</a>'
-                st.session_state['download_mapped'] = f'<a href="data:application/octet-stream;base64,{b64}" download="mapped_data.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download Student IDs</a>'
-                st.session_state['download_teachers'] = f'<a href="data:application/octet-stream;base64,{b64}" download="teacher_codes.xlsx" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/>Click here to Download School Codes</a>'
             
-            # Display the download links
-            if st.session_state['download_mapped']:
-                st.markdown(st.session_state['download_mapped'], unsafe_allow_html=True)
-            if st.session_state['download_teachers']:
-                st.markdown(st.session_state['download_teachers'], unsafe_allow_html=True)
+            # Create the format string based on selected_param
+            param_description = parameter_descriptions[selected_param]
+            format_parts = param_description.split(' + ')
+            format_string = ' '.join([f"{'X'*len(part.split('_')[0])}" for part in format_parts])
+            
+            st.markdown(f"### Your ID format would be: {format_string}")
+        
+        # Process data if one of the modes is selected
+        if uploaded_file and (run_default or customize_id):
+            data_expanded, data_mapped, teacher_codes = process_data(
+                uploaded_file, partner_id, buffer_percent, grade,
+                district_digits, block_digits, school_digits, student_digits, selected_param
+            )
+            
+            # Save results to Excel
+            buffer = io.BytesIO()
+            with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+                data_expanded.to_excel(writer, sheet_name='Student_IDs', index=False)
+                data_mapped.to_excel(writer, sheet_name='Mapped_IDs', index=False)
+                teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
+            st.session_state['download_data'] = buffer.getvalue()
+            
+            # Generate download links
+            st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
+            
+            # Download link for Student_IDs
+            st.markdown(
+                f"""
+                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                download="Student_IDs.xlsx" class="download-link">
+                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Student IDs
+                </a>
+                """,
+                unsafe_allow_html=True
+            )
+            
+            # Download link for Mapped_IDs
+            st.markdown(
+                f"""
+                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                download="Mapped_IDs.xlsx" class="download-link">
+                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Mapped IDs
+                </a>
+                """,
+                unsafe_allow_html=True
+            )
+            
+            # Download link for Teacher_Codes
+            st.markdown(
+                f"""
+                <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                download="Teacher_Codes.xlsx" class="download-link">
+                <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Teacher Codes
+                </a>
+                """,
+                unsafe_allow_html=True
+            )
 
 if __name__ == "__main__":
     main()
