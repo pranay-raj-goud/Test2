@@ -200,7 +200,7 @@ def main():
 
             # Display parameter descriptions directly in selectbox
             parameter_options = list(parameter_descriptions.values())
-            selected_description = st.selectbox("Select Parameter Set", parameter_options)
+            selected_description = st.selectbox("Please Select Parameter Set for Desired Combination of Student IDs", parameter_options)
 
             # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
