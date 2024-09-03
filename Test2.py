@@ -222,8 +222,8 @@ def main():
             selected_description = st.selectbox("", parameter_options)
 
     # Get the corresponding parameter key
-            selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
-            st.write(parameter_descriptions[selected_param])
+            #selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
+            #st.write(parameter_descriptions[selected_param])
             st.markdown(district_digits)
 
     # Add notification messages
