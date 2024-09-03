@@ -163,8 +163,7 @@ def main():
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
     if uploaded_file is not None:
-        # Display the message in green color and centered
-        st.markdown("<p style='color: green; text-align: center; font-weight: bold;'>File uploaded successfully!</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:green; text-align:center;'>File uploaded successfully!</p>", unsafe_allow_html=True)
 
         # Checkboxes to select mode
         run_default = st.checkbox("IDs with Default Settings")
@@ -189,40 +188,45 @@ def main():
             st.write("Default parameters are set.")
 
         if customize_id:
-            # Combined message above Partner ID
-            st.markdown("<p><b>Please provide required values</b></p>", unsafe_allow_html=True)
-            
             # Custom parameters
+
+            # Add a blue-colored message above the "Partner ID" input
+            st.markdown("<p style='color:blue;'>Please provide required values</p>", unsafe_allow_html=True)
+
             partner_id = st.number_input("Partner ID", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
-            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=0.0)
-            
-            # New message in blue after buffer input
-            st.markdown("<p style='color: blue;'><b>Please provide required inputs</b></p>", unsafe_allow_html=True)
-            
-            district_digits = st.number_input("District Digits", min_value=1, max_value=5, value=2)
-            block_digits = st.number_input("Block Digits", min_value=1, max_value=5, value=2)
-            school_digits = st.number_input("School Digits", min_value=1, max_value=5, value=3)
-            student_digits = st.number_input("Student Digits", min_value=1, max_value=5, value=3)
+            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
 
-            # Updated text for parameter selection
-            selected_param = st.radio(
-                "Please select parameter set for Desired Combination of Student's ID",
-                list(parameter_descriptions.keys()),
-                format_func=lambda x: parameter_descriptions[x]
-            )
+            # Add a blue-colored message after the "Buffer (%)" input
+            st.markdown("<p style='color:blue;'>Provide number of digits for each column (default is 2 digits for District and Block, 3 for School and Student)</p>", unsafe_allow_html=True)
 
-        if run_default or customize_id:
-            # Process the uploaded file with the chosen parameters
-            data_expanded, data_mapped, teacher_codes = process_data(
-                uploaded_file, partner_id, buffer_percent, grade,
-                district_digits, block_digits, school_digits, student_digits, selected_param
-            )
+            district_digits = st.number_input("District Digits", min_value=1, value=2)
+            block_digits = st.number_input("Block Digits", min_value=1, value=2)
+            school_digits = st.number_input("School Digits", min_value=1, value=3)
+            student_digits = st.number_input("Student Digits", min_value=1, value=3)
 
-            # Offer downloads for each generated file
-            st.download_button("Download Data File", data_expanded.to_csv(index=False), "data_file.csv", "text/csv")
-            st.download_button("Download Mapped File", data_mapped.to_csv(index=False), "mapped_file.csv", "text/csv")
-            st.download_button("Download Teacher Codes File", teacher_codes.to_csv(index=False), "teacher_codes.csv", "text/csv")
+            # Dropdown menu for parameter set selection
+            selected_param = st.selectbox("Select Parameter Set", list(parameter_descriptions.values()))
 
-if __name__ == "__main__":
+            # Reverse lookup to find the key corresponding to the selected value
+            selected_param = list(parameter_descriptions.keys())[list(parameter_descriptions.values()).index(selected_param)]
+
+        # Process the data and generate outputs
+        data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
+
+        # Output the generated data to Excel
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            data_expanded.to_excel(writer, sheet_name='Data_with_Ids', index=False)
+            data_mapped.to_excel(writer, sheet_name='Mapped_Columns', index=False)
+            teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
+
+        # Prepare the download link
+        output.seek(0)
+        b64 = base64.b64encode(output.read()).decode()
+        href = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx"><img src="https://img.icons8.com/fluency/24/000000/download.png" class="download-icon"/>Download Excel File</a>'
+
+        st.markdown(f'<div class="download-link">{href}</div>', unsafe_allow_html=True)
+
+if __name__ == '__main__':
     main()
