@@ -241,7 +241,7 @@ def main():
             # Warning box in yellow color
             st.markdown(
                 """
-                <div style='background-color: skyblue; padding: 10px; border-radius: 5px;'>
+                <div style='background-color: skyblue; padding: 5px; border-radius: 5px;'>
                 <p><span style='color: red; font-weight: bold;'>Note:</span> <span style='color: black;'>Avoid Digit Overload in your Enrolments</span></p>
                 </div>
                 """,
