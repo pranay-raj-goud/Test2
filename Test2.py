@@ -167,18 +167,14 @@ def main():
             buffer_percent = 0.0
             district_digits = 2
             block_digits = 2
-            school_digits = 3
+            school_digits = 4
             student_digits = 3
-            selected_param = 'A4'  # Default to A4
-            st.write("Default parameters are set.")
-        
-        if customize_id:
-            # Custom parameters
-            st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
-            partner_id = st.number_input("Partner ID", min_value=0, value=1)
+            selected_param = 'A4'  # Default parameter
+        elif customize_id:
+            # Custom settings form for user input
+            partner_id = st.number_input("Enter Partner ID", min_value=0, value=1)
+            buffer_percent = st.slider("Buffer Percentage", 0.0, 100.0, 0.0)
             grade = st.number_input("Grade", min_value=1, value=1)
-            buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
-            st.markdown("<p style='color: blue;'>Please provide required digits</p>", unsafe_allow_html=True)
             district_digits = st.number_input("District ID Digits", min_value=1, value=2)
             block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
             school_digits = st.number_input("School ID Digits", min_value=1, value=3)
@@ -213,7 +209,8 @@ def main():
             len(str(partner_id)) if 'Partner' in part else 
             student_digits)}" for part in format_parts])
             
-            st.markdown(f"### Your ID format would be: {format_string}")
+            # Display the ID format with a smaller font size
+            st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
         
         # Process data if one of the modes is selected
         if uploaded_file and (run_default or customize_id):
