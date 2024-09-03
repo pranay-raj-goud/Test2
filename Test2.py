@@ -205,11 +205,11 @@ def main():
             student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
     # Display parameter descriptions directly in selectbox
-            st.markdown("<p style='color: blue;'>Please Select Parameter Set for Desired Combination of Student IDs</p>", unsafe_allow_html=True)
             parameter_options = list(parameter_descriptions.values())
             selected_description = st.selectbox("", parameter_options)
 
     # Get the corresponding parameter key
+            st.markdown("<p style='color: blue;'>Please Select Parameter Set for Desired Combination of Student IDs</p>", unsafe_allow_html=True)
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
 
