@@ -224,7 +224,8 @@ def main():
     # Get the corresponding parameter key
             #selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             #st.write(parameter_descriptions[selected_param])
-            st.markdown("X"*LEN(partner_id))
+            Pranay = Len(partner_id)
+            st.markdown("X"*Pranay)
             
 
     # Add notification messages
