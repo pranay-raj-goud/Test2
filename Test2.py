@@ -71,7 +71,7 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
     data_mapped.columns = ['Roll_Number', 'Grade', 'School Name', 'School Code', 'District Name', 'Block Name']
     # Generate Teacher_Codes sheet
     teacher_codes = data[['School', 'School_ID']].copy()
-    teacher_codes.columns = ['School Name', 'Teacher Code']
+    teacher_codes.columns = ['School Name', 'School Code']
     return data_expanded, data_mapped, teacher_codes
 
 def download_link(df, filename, link_text):
@@ -280,7 +280,7 @@ def main():
         #st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
         
         # Download button for mapped data
-        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Student IDs"), unsafe_allow_html=True)
+        st.markdown(download_link(mapped_data, "Student_Ids.xlsx", "Download Student IDs"), unsafe_allow_html=True)
         
         # Download button for teacher codes
         st.markdown(download_link(teacher_codes, "School_Codes.xlsx", "Download School Codes"), unsafe_allow_html=True)
