@@ -189,6 +189,7 @@ def main():
             selected_param = 'A4'  # Default parameter
         elif customize_id:
             # Custom parameters
+            st.markdown("<p style='color: blue;'>Please provide required Values</p>", unsafe_allow_html=True)
             partner_id = st.number_input("Partner ID", min_value=1, value=1)
             buffer_percent = st.number_input("Buffer Percentage", min_value=0.0, value=0.0, format="%.2f")
             grade = st.number_input("Grade", min_value=1, value=1)
@@ -263,13 +264,13 @@ def main():
         expanded_data, mapped_data, teacher_codes = st.session_state['download_data']
         
         # Download button for full data with Custom_IDs and Student_IDs
-        st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
+        #st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
         
         # Download button for mapped data
-        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
+        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Student IDs"), unsafe_allow_html=True)
         
         # Download button for teacher codes
-        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
+        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download School Codes"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
