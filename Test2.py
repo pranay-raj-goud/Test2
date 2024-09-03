@@ -91,6 +91,7 @@ def main():
         st.session_state['buttons_initialized'] = True
         st.session_state['generate_clicked'] = False
         st.session_state['download_data'] = None
+        st.session_state['checkboxes_checked'] = False
     
     # Data for the example table
     data = {
@@ -176,14 +177,14 @@ def main():
             school_digits = 4
             student_digits = 3
             selected_param = 'A4'  # Default parameter
+            st.session_state['checkboxes_checked'] = True
         elif customize_id:
             # Custom settings form for user input
             
             # Message in blue color above Enter Partner ID
             st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
-            partner_id = st.number_input("Enter Partner ID", min_value=0, value=1)
-            
-            buffer_percent = st.slider("Buffer Percentage", 0.0, 100.0, 0.0)
+            partner_id = st.number_input("Partner ID", min_value=1, value=1)
+            buffer_percent = st.number_input("Buffer Percentage", min_value=0.0, value=0.0, format="%.2f")
             grade = st.number_input("Grade", min_value=1, value=1)
             
             # Message in blue color above District ID Digits
@@ -224,41 +225,45 @@ def main():
             
             # Display the ID format with a smaller font size
             st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
+            
+            # Warning box in red color
+            st.markdown("<p style='color: red; font-weight: bold;'>Note: Avoid Digit Overload in your Enrolments</p>", unsafe_allow_html=True)
         
         # Generate button action
-        if st.button("Generate IDs"):
-            if uploaded_file is not None:
-                try:
-                    # Process the uploaded file
-                    expanded_data, mapped_data, teacher_codes = process_data(
-                        uploaded_file,
-                        partner_id,
-                        buffer_percent,
-                        grade,
-                        district_digits,
-                        block_digits,
-                        school_digits,
-                        student_digits,
-                        selected_param
-                    )
-                    # Update session state with generated data
-                    st.session_state['download_data'] = (expanded_data, mapped_data, teacher_codes)
-                    st.session_state['generate_clicked'] = True
-                except Exception as e:
-                    st.error(f"Error processing file: {e}")
+        if st.session_state['checkboxes_checked']:
+            if st.button("Generate IDs"):
+                if uploaded_file is not None:
+                    try:
+                        # Process the uploaded file
+                        expanded_data, mapped_data, teacher_codes = process_data(
+                            uploaded_file,
+                            partner_id,
+                            buffer_percent,
+                            grade,
+                            district_digits,
+                            block_digits,
+                            school_digits,
+                            student_digits,
+                            selected_param
+                        )
+                        # Update session state with generated data
+                        st.session_state['download_data'] = (expanded_data, mapped_data, teacher_codes)
+                        st.session_state['generate_clicked'] = True
+                    except Exception as e:
+                        st.error(f"Error processing file: {e}")
     
     # Download buttons after IDs are generated
     if st.session_state['generate_clicked'] and st.session_state['download_data'] is not None:
         expanded_data, mapped_data, teacher_codes = st.session_state['download_data']
         
         # Download button for full data with Custom_IDs and Student_IDs
-        #st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
+        st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
         
         # Download button for mapped data
-        st.markdown(download_link(mapped_data, "Student IDs.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
+        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
         
         # Download button for teacher codes
-        st.markdown(download_link(teacher_codes, "School Codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
+        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
