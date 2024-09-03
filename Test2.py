@@ -233,7 +233,7 @@ def main():
                 st.session_state['download_data'] = buffer.getvalue()
                 
                 # Generate download links
-                st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
+                #st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
                 
                 # Download link for Student_IDs
                 st.markdown(
@@ -241,17 +241,6 @@ def main():
                     <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
                     download="Student_IDs.xlsx" class="download-link">
                     <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Student IDs
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-                
-                # Download link for Mapped_IDs
-                st.markdown(
-                    f"""
-                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                    download="Mapped_IDs.xlsx" class="download-link">
-                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Mapped IDs
                     </a>
                     """,
                     unsafe_allow_html=True
