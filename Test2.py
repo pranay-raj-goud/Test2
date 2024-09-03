@@ -68,14 +68,14 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
 
 def generate_id_format_string(selected_param, school_digits, grade_digits, student_digits):
     formats = {
-        'A1': f"XX X XXX",
-        'A2': f"XX XX X XXX",
-        'A3': f"XX XXX X XXX",
-        'A4': f"X XXX X XXX",
-        'A5': f"XX XX XXX X XXX",
-        'A6': f"X XX XXX X XXX",
-        'A7': f"X XXX X XXX",
-        'A8': f"X XXX XX XXX X XXX"
+        'A1': f"XX X {student_digits*'X'}",
+        'A2': f"XX XX X {student_digits*'X'}",
+        'A3': f"XX XXX X {student_digits*'X'}",
+        'A4': f"X {school_digits*'X'} X {student_digits*'X'}",
+        'A5': f"XX XX XXX X {student_digits*'X'}",
+        'A6': f"X XX XXX X {student_digits*'X'}",
+        'A7': f"X XXX X {student_digits*'X'}",
+        'A8': f"X XXX XX XXX X {student_digits*'X'}"
     }
     return formats.get(selected_param, "Unknown Format")
 
@@ -172,23 +172,12 @@ def main():
             district_digits = st.number_input("District ID Digits", min_value=1, value=2)
             block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
             school_digits = st.number_input("School ID Digits", min_value=1, value=3)
-            student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
+            student_digits = st.number_input("Student ID Digits", min_value=1, value=3)
             
-            parameter_options = list(parameter_descriptions.values())
-            st.markdown(
-               """
-               <style>
-               .custom-selectbox-label {
-                   color: blue;
-                   margin: 0;
-               }
-               </style>
-               <p class='custom-selectbox-label'>Please Select Parameter Set for Desired Combination of Student IDs</p>
-               """,
-               unsafe_allow_html=True
-            )
-            selected_description = st.selectbox("", parameter_options)
+            parameter_options = list(parameter_descriptions.keys())
+            selected_description = st.selectbox("Select Parameter Format", list(parameter_descriptions.values()))
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
+            
             st.markdown(
             """
             <span style='color:red; font-weight:bold;'>Note:</span><br>
