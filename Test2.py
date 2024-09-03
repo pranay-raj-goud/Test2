@@ -283,7 +283,7 @@ def main():
         st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Student IDs"), unsafe_allow_html=True)
         
         # Download button for teacher codes
-        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download School Codes"), unsafe_allow_html=True)
+        st.markdown(download_link(teacher_codes, "School_Codes.xlsx", "Download School Codes"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
