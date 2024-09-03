@@ -163,11 +163,12 @@ def main():
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
     if uploaded_file is not None:
-        st.write("File uploaded successfully!")
+        # Centered and colored message
+        st.markdown("<p style='text-align: center; color: green;'>File uploaded successfully!</p>", unsafe_allow_html=True)
 
         # Checkboxes to select mode
         run_default = st.checkbox("IDs with Default Settings")
-        customize_id = st.checkbox("IDs wit Customized Settings")
+        customize_id = st.checkbox("IDs with Customized Settings")
 
         # Ensure only one checkbox is selected
         if run_default and customize_id:
