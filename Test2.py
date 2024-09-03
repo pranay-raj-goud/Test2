@@ -171,9 +171,16 @@ def main():
             selected_param = 'A4'  # Default parameter
         elif customize_id:
             # Custom settings form for user input
+            
+            # Message in blue color above Enter Partner ID
+            st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
             partner_id = st.number_input("Enter Partner ID", min_value=0, value=1)
+            
             buffer_percent = st.slider("Buffer Percentage", 0.0, 100.0, 0.0)
             grade = st.number_input("Grade", min_value=1, value=1)
+            
+            # Message in blue color above District ID Digits
+            st.markdown("<p style='color: blue;'>Please provide required Digits</p>", unsafe_allow_html=True)
             district_digits = st.number_input("District ID Digits", min_value=1, value=2)
             block_digits = st.number_input("Block ID Digits", min_value=1, value=2)
             school_digits = st.number_input("School ID Digits", min_value=1, value=3)
@@ -182,16 +189,16 @@ def main():
             # Display parameter descriptions directly in selectbox
             parameter_options = list(parameter_descriptions.values())
             st.markdown(
-               """
-               <style>
-               .custom-selectbox-label {
-                   color: blue;
-                   margin: 0;
-               }
-               </style>
-               <p class='custom-selectbox-label'>Please Select Parameter Set for Desired Combination of Student IDs</p>
-               """,
-               unsafe_allow_html=True
+                """
+                <style>
+                .custom-selectbox-label {
+                    color: blue;
+                    margin: 0;
+                }
+                </style>
+                <p class='custom-selectbox-label'>Please Select Parameter Set for Desired Combination of Student IDs</p>
+                """,
+                unsafe_allow_html=True
             )
             selected_description = st.selectbox("", parameter_options)
             
@@ -211,51 +218,48 @@ def main():
             # Display the ID format with a smaller font size
             st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
         
-        # Generate IDs button
+        # Generate button action
         if st.button("Generate IDs"):
-            st.session_state['generate_clicked'] = True  # Set state to True when button is clicked
+            if uploaded_file is not None:
+                try:
+                    # Process the uploaded file
+                    expanded_data, mapped_data, teacher_codes = process_data(
+                        uploaded_file,
+                        partner_id,
+                        buffer_percent,
+                        grade,
+                        district_digits,
+                        block_digits,
+                        school_digits,
+                        student_digits,
+                        selected_param
+                    )
+                    # Download data section
+                    st.session_state['download_data'] = (expanded_data, mapped_data, teacher_codes)
+                    st.session_state['generate_clicked'] = True
+                except Exception as e:
+                    st.error(f"Error processing file: {e}")
+    
+    # Download buttons after IDs are generated
+    if st.session_state['generate_clicked'] and st.session_state['download_data'] is not None:
+        expanded_data, mapped_data, teacher_codes = st.session_state['download_data']
         
-        # Only show download options after "Generate IDs" button is clicked
-        if st.session_state['generate_clicked']:
-            # Process data if one of the modes is selected
-            if uploaded_file and (run_default or customize_id):
-                data_expanded, data_mapped, teacher_codes = process_data(
-                    uploaded_file, partner_id, buffer_percent, grade,
-                    district_digits, block_digits, school_digits, student_digits, selected_param
-                )
-                
-                # Save results to Excel
-                buffer = io.BytesIO()
-                with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-                    data_expanded.to_excel(writer, sheet_name='Student_IDs', index=False)
-                    data_mapped.to_excel(writer, sheet_name='Mapped_IDs', index=False)
-                    teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
-                st.session_state['download_data'] = buffer.getvalue()
-                
-                # Generate download links
-                #st.markdown("<h3>Download the generated files:</h3>", unsafe_allow_html=True)
-                
-                # Download link for Student_IDs
-                st.markdown(
-                    f"""
-                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                    download="Student_IDs.xlsx" class="download-link">
-                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Student IDs
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-                
-                # Download link for Teacher_Codes
-                st.markdown(
-                    f"""
-                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
-                    download="Teacher_Codes.xlsx" class="download-link">
-                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Teacher Codes
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
+        # Download button for full data with Custom_IDs and Student_IDs
+        def download_link(df, filename, link_text):
+            towrite = io.BytesIO()
+            df.to_excel(towrite, encoding='utf-8', index=False, header=True)
+            towrite.seek(0)
+            b64 = base64.b64encode(towrite.read()).decode()
+            link = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}">{link_text}</a>'
+            return link
+        
+        st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
+        
+        # Download button for mapped data
+        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
+        
+        # Download button for teacher codes
+        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
