@@ -90,7 +90,7 @@ def main():
     st.markdown("<h1 style='text-align: center;'>Tool for ID Generation</h1>", unsafe_allow_html=True)
 
     # Replace text and set font size to small
-    st.markdown("<p style='font-size: small;'>Please rename your column headers as per input file structure shown:</p>", unsafe_allow_html=True)
+    #st.markdown("<p style='font-size: small;'>Please rename your column headers as per input file structure shown:</p>", unsafe_allow_html=True)
 
     # Data for the example table
     data = {
@@ -224,7 +224,7 @@ def main():
     # Get the corresponding parameter key
             #selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             #st.write(parameter_descriptions[selected_param])
-            Pranay = Len(partner_id)
+            Pranay = Len(str(partner_id))
             st.markdown("X"*Pranay)
             
 
