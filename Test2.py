@@ -245,14 +245,6 @@ def main():
         expanded_data, mapped_data, teacher_codes = st.session_state['download_data']
         
         # Download button for full data with Custom_IDs and Student_IDs
-        def download_link(df, filename, link_text):
-            towrite = io.BytesIO()
-            df.to_excel(towrite, encoding='utf-8', index=False, header=True)
-            towrite.seek(0)
-            b64 = base64.b64encode(towrite.read()).decode()
-            link = f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}">{link_text}</a>'
-            return link
-        
         st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
         
         # Download button for mapped data
@@ -263,3 +255,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
