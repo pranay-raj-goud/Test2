@@ -260,4 +260,13 @@ def main():
                 # Download link for Teacher_Codes
                 st.markdown(
                     f"""
-                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode
+                    <a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(st.session_state['download_data']).decode()}"
+                    download="Teacher_Codes.xlsx" class="download-link">
+                    <img src="https://img.icons8.com/ios/50/000000/download.png" class="download-icon"/>Download Teacher Codes
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+if __name__ == "__main__":
+    main()
