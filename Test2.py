@@ -233,7 +233,7 @@ def main():
             # Display the ID format with a smaller font size
             st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
             # Display the School Code format based on the selected parameter
-            if 'School' in param_description:
+        
             school_format = 'X' * school_digits
             st.markdown(f"<p style='font-size: small;'>Your School Code format would be: {school_format}</p>", unsafe_allow_html=True)
 
