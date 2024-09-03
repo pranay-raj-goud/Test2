@@ -167,12 +167,22 @@ def main():
 
         # Checkboxes to select mode
         run_default = st.checkbox("IDs with Default Settings")
-        customize_id = st.checkbox("IDs wit Customized Settings")
+        customize_id = st.checkbox("IDs with Customized Settings")
 
         # Ensure only one checkbox is selected
         if run_default and customize_id:
             st.warning("Please select only one option.")
             return
+
+        # Initialize variables with default values
+        partner_id = 1
+        grade = 1
+        buffer_percent = 0.0
+        district_digits = 2
+        block_digits = 2
+        school_digits = 3
+        student_digits = 3
+        selected_param = 'A4'  # Default to A4
 
         if run_default:
             # Default parameters
@@ -187,19 +197,14 @@ def main():
 
             st.write("Default parameters are set.")
 
-        if customize_id:
+        elif customize_id:
             # Custom parameters
-
-            # Add a blue-colored message above the "Partner ID" input
             st.markdown("<p style='color:blue;'>Please provide required values</p>", unsafe_allow_html=True)
-
             partner_id = st.number_input("Partner ID", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
             buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
 
-            # Add a blue-colored message after the "Buffer (%)" input
             st.markdown("<p style='color:blue;'>Provide number of digits for each column (default is 2 digits for District and Block, 3 for School and Student)</p>", unsafe_allow_html=True)
-
             district_digits = st.number_input("District Digits", min_value=1, value=2)
             block_digits = st.number_input("Block Digits", min_value=1, value=2)
             school_digits = st.number_input("School Digits", min_value=1, value=3)
@@ -207,26 +212,29 @@ def main():
 
             # Dropdown menu for parameter set selection
             selected_param = st.selectbox("Select Parameter Set", list(parameter_descriptions.values()))
-
             # Reverse lookup to find the key corresponding to the selected value
             selected_param = list(parameter_descriptions.keys())[list(parameter_descriptions.values()).index(selected_param)]
 
-        # Process the data and generate outputs
-        data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
+        # Check if parameters are initialized before processing data
+        if 'selected_param' in locals():
+            # Process the data and generate outputs
+            data_expanded, data_mapped, teacher_codes = process_data(uploaded_file, partner_id, buffer_percent, grade, district_digits, block_digits, school_digits, student_digits, selected_param)
 
-        # Output the generated data to Excel
-        output = io.BytesIO()
-        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            data_expanded.to_excel(writer, sheet_name='Data_with_Ids', index=False)
-            data_mapped.to_excel(writer, sheet_name='Mapped_Columns', index=False)
-            teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
+            # Output the generated data to Excel
+            output = io.BytesIO()
+            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+                data_expanded.to_excel(writer, sheet_name='Data_with_Ids', index=False)
+                data_mapped.to_excel(writer, sheet_name='Mapped_Columns', index=False)
+                teacher_codes.to_excel(writer, sheet_name='Teacher_Codes', index=False)
 
-        # Prepare the download link
-        output.seek(0)
-        b64 = base64.b64encode(output.read()).decode()
-        href = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx"><img src="https://img.icons8.com/fluency/24/000000/download.png" class="download-icon"/>Download Excel File</a>'
+            # Prepare the download link
+            output.seek(0)
+            b64 = base64.b64encode(output.read()).decode()
+            href = f'<a href="data:application/octet-stream;base64,{b64}" download="generated_ids.xlsx"><img src="https://img.icons8.com/fluency/24/000000/download.png" class="download-icon"/>Download Excel File</a>'
 
-        st.markdown(f'<div class="download-link">{href}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="download-link">{href}</div>', unsafe_allow_html=True)
+        else:
+            st.error("Please upload a file and select an option to proceed.")
 
 if __name__ == '__main__':
     main()
