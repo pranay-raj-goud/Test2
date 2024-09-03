@@ -153,7 +153,7 @@ def main():
     )
 
     # Display the new blue text lines
-    st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
+    #st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
 
     # Initialize session state for buttons
     if 'buttons_initialized' not in st.session_state:
@@ -193,8 +193,8 @@ def main():
 
         if customize_id:
             # Custom parameters
-            partner_id = st.number_input("Partner ID", min_value=0, value=1)
             st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
+            partner_id = st.number_input("Partner ID", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
             buffer_percent = st.number_input("Buffer (%)", min_value=0.0, max_value=100.0, value=30.0)
             st.markdown("<p style='color: blue;'>Please provide required digits</p>", unsafe_allow_html=True)
