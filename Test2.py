@@ -106,7 +106,7 @@ def main():
     # Convert DataFrame to HTML
     html_table = df.to_html(index=False, border=0, classes='custom-table')
     
-    # Custom CSS to style the table
+    # Custom CSS to style the table and the warning box
     css = """
     <style>
     .custom-table {
@@ -133,6 +133,13 @@ def main():
     }
     .download-icon {
         margin-right: 8px;
+    }
+    .warning-box {
+        background-color: #FFFFE0;
+        border: 1px solid #FFD700;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
     }
     </style>
     """
@@ -179,10 +186,7 @@ def main():
             selected_param = 'A4'  # Default parameter
             st.session_state['checkboxes_checked'] = True
         elif customize_id:
-            # Custom settings form for user input
-            
-            # Message in blue color above Enter Partner ID
-            st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
+            # Custom parameters
             partner_id = st.number_input("Partner ID", min_value=1, value=1)
             buffer_percent = st.number_input("Buffer Percentage", min_value=0.0, value=0.0, format="%.2f")
             grade = st.number_input("Grade", min_value=1, value=1)
@@ -226,8 +230,8 @@ def main():
             # Display the ID format with a smaller font size
             st.markdown(f"<p style='font-size: small;'>Your ID format would be: {format_string}</p>", unsafe_allow_html=True)
             
-            # Warning box in red color
-            st.markdown("<p style='color: red; font-weight: bold;'>Note: Avoid Digit Overload in your Enrolments</p>", unsafe_allow_html=True)
+            # Warning box in yellow color
+            st.markdown("<div class='warning-box'><p style='color: black;'>Note: Avoid Digit Overload in your Enrolments</p></div>", unsafe_allow_html=True)
         
         # Generate button action
         if st.session_state['checkboxes_checked']:
