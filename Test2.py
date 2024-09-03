@@ -213,7 +213,7 @@ def main():
             st.write(parameter_descriptions[selected_param])
 
             # Display descriptive message for the selected parameter
-            description_message = f"Your ID would be a combination of {parameter_descriptions[selected_param]} in this way."
+            description_message = f"Your ID would be a combination of {parameter_descriptions[selected_param]}."
             st.markdown(f"<p style='color: black;'>{description_message}</p>", unsafe_allow_html=True)
 
             # Add notification messages
