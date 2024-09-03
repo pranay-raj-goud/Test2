@@ -193,7 +193,7 @@ def main():
 
         
         if customize_id:
-            # Custom parameters
+    # Custom parameters
             st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
             partner_id = st.number_input("Partner ID", min_value=0, value=1)
             grade = st.number_input("Grade", min_value=1, value=1)
@@ -204,19 +204,16 @@ def main():
             school_digits = st.number_input("School ID Digits", min_value=1, value=3)
             student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
-            # Display parameter descriptions directly in selectbox
+    # Display parameter descriptions directly in selectbox
+            st.markdown("<p style='color: blue;'>Please Select Parameter Set for Desired Combination of Student IDs</p>", unsafe_allow_html=True)
             parameter_options = list(parameter_descriptions.values())
-            selected_description = st.selectbox("Please Select Parameter Set for Desired Combination of Student IDs", parameter_options)
+            selected_description = st.selectbox("", parameter_options)
 
-            # Get the corresponding parameter key
+    # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
 
-            # Display descriptive message for the selected parameter
-            description_message = f"Your ID would be a combination of {parameter_descriptions[selected_param]}."
-            st.markdown(f"<p style='color: black;'>{description_message}</p>", unsafe_allow_html=True)
-
-            # Add notification messages
+    # Add notification messages
             st.warning("Avoid Digit Overload in Your Enrollments:")
 
         if run_default or customize_id:
