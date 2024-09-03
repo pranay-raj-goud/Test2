@@ -187,7 +187,7 @@ def main():
             parameter_options = list(parameter_descriptions.values())
             selected_description = st.selectbox("", parameter_options)
     # Get the corresponding parameter key
-            #selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
+            selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             #st.write(parameter_descriptions[selected_param])
     # Add notification messages
             st.warning("Avoid Digit Overload in Your Enrollments:")
