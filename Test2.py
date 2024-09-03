@@ -185,6 +185,7 @@ def main():
             student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
             
             # Display parameter descriptions directly in selectbox
+            parameter_options = list(parameter_descriptions.values())
             st.markdown(
                """
                <style>
@@ -197,7 +198,6 @@ def main():
                """,
                unsafe_allow_html=True
             )
-            parameter_options = list(parameter_descriptions.values())
             selected_description = st.selectbox("", parameter_options)
             
             # Get the corresponding parameter key
