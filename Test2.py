@@ -192,6 +192,7 @@ def main():
             st.write("Default parameters are set.")
 
         
+    
         if customize_id:
     # Custom parameters
             st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
@@ -205,9 +206,21 @@ def main():
             student_digits = st.number_input("Student ID Digits", min_value=1, value=4)
 
     # Display parameter descriptions directly in selectbox
-            st.markdown("<p style='color: blue; margin-bottom: 0;'>Please Select Parameter Set for Desired Combination of Student IDs</p>", unsafe_allow_html=True)
+            st.markdown(
+               """
+               <style>
+               .custom-selectbox-label {
+                   color: blue;
+                   margin: 0;
+               }
+               </style>
+               <p class='custom-selectbox-label'>Please Select Parameter Set for Desired Combination of Student IDs</p>
+               """,
+               unsafe_allow_html=True
+            )
             parameter_options = list(parameter_descriptions.values())
             selected_description = st.selectbox("", parameter_options)
+
     # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
