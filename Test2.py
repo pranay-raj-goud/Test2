@@ -92,7 +92,7 @@ def main():
         st.session_state['generate_clicked'] = False
         st.session_state['download_data'] = None
         st.session_state['checkboxes_checked'] = False
-    
+
     # Data for the example table
     data = {
         'District': ['District A'],
@@ -173,6 +173,9 @@ def main():
         if run_default and customize_id:
             st.warning("Please select only one option.")
             return
+
+        # Set checkboxes_checked to True if either checkbox is selected
+        st.session_state['checkboxes_checked'] = run_default or customize_id
         
         if run_default:
             # Default parameters
@@ -184,7 +187,6 @@ def main():
             school_digits = 4
             student_digits = 3
             selected_param = 'A4'  # Default parameter
-            st.session_state['checkboxes_checked'] = True
         elif customize_id:
             # Custom parameters
             partner_id = st.number_input("Partner ID", min_value=1, value=1)
