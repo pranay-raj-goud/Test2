@@ -209,6 +209,8 @@ def main():
             format_string = ' '.join([f"{'X' * (school_digits if 'School' in part else 
             block_digits if 'Block' in part else 
             district_digits if 'District' in part else 
+            len(str(grade)) if 'Grade' in part else 
+            len(str(partner_id)) if 'Partner' in part else 
             student_digits)}" for part in format_parts])
             
             st.markdown(f"### Your ID format would be: {format_string}")
