@@ -252,13 +252,13 @@ def main():
         expanded_data, mapped_data, teacher_codes = st.session_state['download_data']
         
         # Download button for full data with Custom_IDs and Student_IDs
-        st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
+        #st.markdown(download_link(expanded_data, "full_data.xlsx", "Download Full Data (with Custom_IDs and Student_IDs)"), unsafe_allow_html=True)
         
         # Download button for mapped data
-        st.markdown(download_link(mapped_data, "mapped_data.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
+        st.markdown(download_link(mapped_data, "Student IDs.xlsx", "Download Mapped Data"), unsafe_allow_html=True)
         
         # Download button for teacher codes
-        st.markdown(download_link(teacher_codes, "teacher_codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
+        st.markdown(download_link(teacher_codes, "School Codes.xlsx", "Download Teacher Codes"), unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
