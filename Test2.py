@@ -191,6 +191,7 @@ def main():
 
             st.write("Default parameters are set.")
 
+        
         if customize_id:
             # Custom parameters
             st.markdown("<p style='color: blue;'>Please provide required values</p>", unsafe_allow_html=True)
@@ -210,6 +211,10 @@ def main():
             # Get the corresponding parameter key
             selected_param = list(parameter_descriptions.keys())[parameter_options.index(selected_description)]
             st.write(parameter_descriptions[selected_param])
+
+            # Display descriptive message for the selected parameter
+            description_message = f"Your ID would be a combination of {parameter_descriptions[selected_param]} in this way."
+            st.markdown(f"<p style='color: black;'>{description_message}</p>", unsafe_allow_html=True)
 
             # Add notification messages
             st.warning("Avoid Digit Overload in Your Enrollments:")
