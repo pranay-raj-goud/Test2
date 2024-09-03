@@ -74,9 +74,23 @@ def process_data(uploaded_file, partner_id, buffer_percent, grade, district_digi
     teacher_codes.columns = ['School Name', 'Teacher Code']
     return data_expanded, data_mapped, teacher_codes
 
+def download_link(df, filename, link_text):
+    towrite = io.BytesIO()
+    with pd.ExcelWriter(towrite, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Sheet1')
+    towrite.seek(0)
+    b64 = base64.b64encode(towrite.read()).decode()
+    return f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{filename}" class="download-link"><img src="https://img.icons8.com/material-outlined/24/000000/download.png" class="download-icon"/> {link_text}</a>'
+
 def main():
     # Centered title
     st.markdown("<h1 style='text-align: center;'>Tool for ID Generation</h1>", unsafe_allow_html=True)
+    
+    # Initialize session state
+    if 'buttons_initialized' not in st.session_state:
+        st.session_state['buttons_initialized'] = True
+        st.session_state['generate_clicked'] = False
+        st.session_state['download_data'] = None
     
     # Data for the example table
     data = {
@@ -86,7 +100,6 @@ def main():
         'School': ['School A'],
         'Total_Students': [300]
     }
-    # Create a DataFrame
     df = pd.DataFrame(data)
     
     # Convert DataFrame to HTML
@@ -99,11 +112,11 @@ def main():
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
-        margin-top: 10px; /* Adjust spacing between text and table */
+        margin-top: 10px;
     }
     .custom-table th, .custom-table td {
         padding: 10px;
-        text-align: center; /* Center align text */
+        text-align: center;
         border: 1px solid #ddd;
     }
     .custom-table th {
@@ -137,12 +150,6 @@ def main():
         """,
         unsafe_allow_html=True
     )
-    
-    # Initialize session state for buttons
-    if 'buttons_initialized' not in st.session_state:
-        st.session_state['buttons_initialized'] = True
-        st.session_state['generate_clicked'] = False  # State to check if Generate button is clicked
-        st.session_state['download_data'] = None
     
     # File uploader section
     uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
@@ -234,7 +241,7 @@ def main():
                         student_digits,
                         selected_param
                     )
-                    # Download data section
+                    # Update session state with generated data
                     st.session_state['download_data'] = (expanded_data, mapped_data, teacher_codes)
                     st.session_state['generate_clicked'] = True
                 except Exception as e:
@@ -255,4 +262,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
