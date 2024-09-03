@@ -206,7 +206,6 @@ def main():
             """
             <span style='color:red; font-weight:bold;'>Note:</span><br>
             <span style='color:black;'>• Avoid Digit Overload in Your Enrollments:</span><br>
-            #<span style='color:black;'>• Please upload an XLSX file that is less than 200MB in size.</span>
             """,
             unsafe_allow_html=True
             )
