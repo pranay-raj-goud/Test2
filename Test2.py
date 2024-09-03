@@ -166,8 +166,8 @@ def main():
         st.write("File uploaded successfully!")
 
         # Checkboxes to select mode
-        run_default = st.checkbox("Rock the Default Settings")
-        customize_id = st.checkbox("Play by Your Rules")
+        run_default = st.checkbox("IDs with Default Settings")
+        customize_id = st.checkbox("IDs wit Customized Settings")
 
         # Ensure only one checkbox is selected
         if run_default and customize_id:
