@@ -78,9 +78,6 @@ def main():
     # Centered title
     st.markdown("<h1 style='text-align: center;'>Tool for ID Generation</h1>", unsafe_allow_html=True)
     
-    # Replace text and set font size to small
-    st.markdown("<p style='font-size: small;'>Please rename your column headers as per input file structure shown:</p>", unsafe_allow_html=True)
-    
     # Data for the example table
     data = {
         'District': ['District A'],
