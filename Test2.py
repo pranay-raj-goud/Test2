@@ -239,7 +239,15 @@ def main():
 
             
             # Warning box in yellow color
-            st.markdown("<div class='warning-box'><p style='color: black;'>Note: Avoid Digit Overload in your Enrolments</p></div>", unsafe_allow_html=True)
+            st.markdown(
+                """
+                <div style='background-color: skyblue; padding: 10px; border-radius: 5px;'>
+                <p><span style='color: red; font-weight: bold;'>Note:</span> <span style='color: black;'>Avoid Digit Overload in your Enrolments</span></p>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
         
         # Generate button action
         if st.session_state['checkboxes_checked']:
